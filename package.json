@@ -1,0 +1,12 @@
+{
+  "private": true,
+  "devDependencies": {
+    "dotenv": "^17.4.2",
+    "ssh2": "^1.17.0",
+    "ssh2-sftp-client": "^12.1.1"
+  },
+  "scripts": {
+    "deploy": "node deploy.js",
+    "deploy:init": "node deploy.js --init"
+  }
+}

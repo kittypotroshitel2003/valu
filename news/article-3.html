@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Горная вода Кубани: у истоков чистоты — ВАЛУ</title>
+  <style>
+    @font-face { font-family: 'Kreadon'; src: url('../fonts/Kreadon-EL.woff2') format('woff2'); font-weight: 200; font-style: normal; font-display: swap; }
+    @font-face { font-family: 'Kreadon'; src: url('../fonts/Kreadon-L.woff2') format('woff2'); font-weight: 300; font-style: normal; font-display: swap; }
+    @font-face { font-family: 'Kreadon'; src: url('../fonts/Kreadon-R.woff2') format('woff2'); font-weight: 400; font-style: normal; font-display: swap; }
+    @font-face { font-family: 'Kreadon'; src: url('../fonts/Kreadon-M.woff2') format('woff2'); font-weight: 500; font-style: normal; font-display: swap; }
+    @font-face { font-family: 'Kreadon'; src: url('../fonts/Kreadon-D.woff2') format('woff2'); font-weight: 600; font-style: normal; font-display: swap; }
+    @font-face { font-family: 'Kreadon'; src: url('../fonts/Kreadon-B.woff2') format('woff2'); font-weight: 700; font-style: normal; font-display: swap; }
+    @font-face { font-family: 'Kreadon'; src: url('../fonts/Kreadon-EB.woff2') format('woff2'); font-weight: 800; font-style: normal; font-display: swap; }
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    :root { --blue: #113e66; --light-blue: #edf6fc; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Kreadon', sans-serif; color: var(--blue); background: #fff; overflow-x: hidden; }
+
+    .nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 24px 80px;
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(17,62,102,0.08);
+    }
+    .nav__logo { height: 36px; width: auto; display: block; }
+    .nav__group { display: flex; gap: 32px; align-items: center; }
+    .nav__group a {
+      font-size: 15px; font-weight: 600; letter-spacing: 0.3px;
+      text-decoration: none; color: var(--blue); text-transform: lowercase;
+      opacity: 0.75; transition: opacity .2s;
+    }
+    .nav__group a:hover { opacity: 1; }
+
+    .article {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 140px 40px 100px;
+    }
+    .article__back {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 15px; font-weight: 600; color: var(--blue);
+      text-decoration: none; opacity: 0.6; margin-bottom: 48px;
+      transition: opacity .2s;
+    }
+    .article__back:hover { opacity: 1; }
+    .article__back svg { width: 16px; height: 16px; }
+    .article__date { font-size: 15px; font-weight: 500; opacity: 0.5; margin-bottom: 16px; display: block; }
+    .article__title { font-size: 48px; font-weight: 800; letter-spacing: -0.5px; line-height: 1.1; margin-bottom: 40px; }
+    .article__hero { width: 100%; height: 480px; object-fit: cover; border-radius: 24px; margin-bottom: 48px; display: block; }
+    .article__body p { font-size: 19px; font-weight: 400; line-height: 1.7; margin-bottom: 24px; opacity: 0.85; }
+    .article__body h2 { font-size: 28px; font-weight: 700; letter-spacing: -0.3px; margin: 48px 0 20px; }
+    .article__body strong { font-weight: 700; }
+
+    .article__highlight {
+      background: var(--light-blue);
+      border-radius: 20px;
+      padding: 32px 36px;
+      margin: 40px 0;
+    }
+    .article__highlight p { opacity: 1; margin-bottom: 0; }
+
+    footer {
+      background: var(--light-blue);
+      padding: 48px 80px;
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 20px;
+    }
+    .footer__copy { font-size: 15px; font-weight: 500; opacity: 0.5; }
+    .footer__nav { display: flex; gap: 28px; }
+    .footer__nav a { font-size: 15px; font-weight: 600; color: var(--blue); text-decoration: none; opacity: 0.65; transition: opacity .2s; }
+    .footer__nav a:hover { opacity: 1; }
+    .footer__policy { font-size: 14px; font-weight: 500; color: var(--blue); text-decoration: none; opacity: 0.45; transition: opacity .2s; }
+    .footer__policy:hover { opacity: 0.75; }
+
+    .nav__burger {
+      display: none; flex-direction: column; justify-content: center; gap: 5px;
+      background: none; border: none; cursor: pointer; padding: 6px; z-index: 200;
+    }
+    .nav__burger span {
+      display: block; width: 24px; height: 2px;
+      background: var(--blue); border-radius: 2px;
+      transition: transform .4s cubic-bezier(.22,1,.36,1), opacity .3s;
+    }
+    .nav__burger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .nav__burger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+    .nav__burger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+    @keyframes menuLinkIn {
+      from { opacity: 0; transform: translateY(28px) skewY(3deg); }
+      to   { opacity: 1; transform: translateY(0) skewY(0); }
+    }
+    .nav__mobile-menu {
+      display: none; position: fixed; inset: 0; background: var(--blue); z-index: 150;
+      flex-direction: column; align-items: center; justify-content: center; gap: 40px;
+      clip-path: circle(0% at calc(100% - 38px) 38px);
+      transition: clip-path .7s cubic-bezier(.77,0,.18,1);
+      pointer-events: none; overflow: hidden;
+    }
+    .nav__mobile-menu.open { clip-path: circle(150% at calc(100% - 38px) 38px); pointer-events: auto; }
+    .nav__mobile-close {
+      position: absolute; top: 22px; right: 22px; width: 48px; height: 48px; border-radius: 50%;
+      background: rgba(255,255,255,0.1); border: 1.5px solid rgba(255,255,255,0.18);
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      transition: background .25s, transform .4s cubic-bezier(.22,1,.36,1);
+    }
+    .nav__mobile-close:hover { background: rgba(255,255,255,0.18); transform: rotate(90deg); }
+    .nav__mobile-close span { position: absolute; width: 18px; height: 1.5px; background: rgba(255,255,255,0.85); border-radius: 2px; }
+    .nav__mobile-close span:nth-child(1) { transform: rotate(45deg); }
+    .nav__mobile-close span:nth-child(2) { transform: rotate(-45deg); }
+    .nav__mobile-menu a {
+      font-size: 38px; font-weight: 700; color: rgba(255,255,255,0.88);
+      text-decoration: none; letter-spacing: -0.5px;
+      opacity: 0; transform: translateY(32px); transition: color .25s;
+    }
+    .nav__mobile-menu a:hover { color: rgba(255,255,255,0.35); }
+    .nav__mobile-menu.open a { animation: menuLinkIn .55s cubic-bezier(.22,1,.36,1) both; }
+    .nav__mobile-menu.open a:nth-child(2) { animation-delay: .28s; }
+    .nav__mobile-menu.open a:nth-child(3) { animation-delay: .37s; }
+    .nav__mobile-menu.open a:nth-child(4) { animation-delay: .46s; }
+    .nav__mobile-menu.open a:nth-child(5) { animation-delay: .55s; }
+
+    @media (max-width: 900px) {
+      .nav { padding: 20px 40px; }
+      .article { padding: 110px 40px 80px; }
+      .article__title { font-size: 38px; }
+      footer { padding: 36px 40px; }
+    }
+    @media (max-width: 768px) {
+      .nav { padding: 16px 20px; }
+      .nav__group { display: none; }
+      .nav__burger { display: flex; }
+      .nav__mobile-menu { display: flex; }
+      .article { padding: 90px 20px 60px; max-width: 100%; }
+      .article__back { margin-bottom: 28px; font-size: 14px; }
+      .article__date { font-size: 13px; }
+      .article__title { font-size: 30px; line-height: 1.1; margin-bottom: 24px; }
+      .article__hero { height: 220px; border-radius: 16px; margin-bottom: 28px; }
+      .article__body p { font-size: 16px; line-height: 1.65; margin-bottom: 18px; }
+      .article__body h2 { font-size: 22px; margin: 32px 0 14px; }
+      .article__highlight { padding: 20px 22px; border-radius: 14px; margin: 28px 0; }
+      footer { padding: 28px 20px; flex-direction: column; gap: 12px; text-align: center; }
+      .footer__nav { flex-wrap: wrap; justify-content: center; gap: 10px 18px; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="nav">
+    <div class="nav__group">
+      <a href="../index.html#about">о нас</a>
+      <a href="../index.html#products">продукция</a>
+    </div>
+    <a href="../index.html">
+      <img class="nav__logo" src="../images/logo.svg" alt="ВАЛУ">
+    </a>
+    <div class="nav__group">
+      <a href="../index.html#reviews">отзывы</a>
+      <a href="../index.html#contact">сотрудничать</a>
+    </div>
+    <button class="nav__burger" aria-label="Меню" id="navBurger">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <div class="nav__mobile-menu" id="navMobileMenu">
+    <button class="nav__mobile-close" id="navMobileClose" aria-label="Закрыть"><span></span><span></span></button>
+    <a href="../index.html#about">о нас</a>
+    <a href="../index.html#products">продукция</a>
+    <a href="../index.html#reviews">отзывы</a>
+    <a href="../index.html#contact">сотрудничать</a>
+  </div>
+
+  <main class="article">
+    <a href="../index.html#news" class="article__back">
+      <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M10 12L6 8L10 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      Назад к новостям
+    </a>
+
+    <span class="article__date">3 мая 2026</span>
+    <h1 class="article__title">Горная вода Кубани: у истоков чистоты</h1>
+
+    <img class="article__hero" src="../images/news-2.webp" alt="Горные источники Кубани">
+
+    <div class="article__body">
+      <p>Кубань — один из немногих регионов России, где горный рельеф, особый климат и геология создают идеальные условия для формирования природной питьевой воды исключительного качества. Именно здесь, на высотах западного Кавказа, рождается вода ВАЛУ — там, где снежный покров и ледники медленно тают и просачиваются сквозь толщи горных пород.</p>
+
+      <h2>Путь воды от истока до бутылки</h2>
+      <p>Прежде чем оказаться в источнике, вода ВАЛУ проходит многолетний путь сквозь слои известняка, гранита и кварцита. Этот естественный фильтрат занимает десятилетия: вода медленно движется вниз, очищаясь и насыщаясь природными минералами. Именно поэтому горная вода отличается от поверхностных источников — она несёт в себе историю геологических слоёв, через которые прошла.</p>
+
+      <p>На выходе из источника вода имеет стабильную температуру около 7–9°C независимо от сезона — признак глубокого залегания и надёжной защиты от внешней среды. Это один из ключевых показателей качества: чем стабильнее температура, тем менее подвержен источник поверхностным загрязнениям.</p>
+
+      <div class="article__highlight">
+        <p><strong>Интересный факт:</strong> вода, которую вы держите в руках, начала свой путь как атмосферные осадки более 20 лет назад — и всё это время находилась под защитой горных пород.</p>
+      </div>
+
+      <h2>Минеральный состав как отпечаток места</h2>
+      <p>Каждый горный источник имеет уникальный минеральный профиль — «отпечаток» тех пород, через которые прошла вода. У воды ВАЛУ этот состав умеренный и сбалансированный: кальций и магний в соотношении, близком к физиологическому оптимуму, бикарбонаты, поддерживающие кислотно-щелочной баланс, и минимальное содержание натрия. Такой состав делает воду пригодной для ежедневного употребления без ограничений.</p>
+
+      <p>Мягкость вкуса — следствие невысокой общей минерализации. Вода не «давит» на вкусовые рецепторы и не оставляет послевкусия. Это то, что профессиональные дегустаторы называют «нейтральной чистотой» — качество, которое ценится в воде так же, как в хорошем белом вине.</p>
+
+      <h2>Производство без лишних шагов</h2>
+      <p>Наша задача на производстве — не улучшить природу, а не навредить ей. Вода из источника проходит щадящую фильтрацию для удаления механических примесей и разливается без добавления каких-либо веществ. Минеральный состав, который сформировала земля, остаётся нетронутым.</p>
+
+      <p>Кубань — это не просто красивое слово на этикетке. Это конкретный адрес, конкретная геология и конкретная ответственность: перед покупателями, перед территорией и перед природой, которая создала этот источник задолго до нас.</p>
+    </div>
+  </main>
+
+  <footer>
+    <span class="footer__copy">© Валу, 2026</span>
+    <nav class="footer__nav">
+      <a href="../index.html#about">о нас</a>
+      <a href="../index.html#products">продукция</a>
+      <a href="../index.html#reviews">отзывы</a>
+    </nav>
+    <a class="footer__policy" href="#">политика конфиденциальности</a>
+  </footer>
+
+  <script>
+    (function () {
+      var burger = document.getElementById('navBurger');
+      var menu   = document.getElementById('navMobileMenu');
+      var close  = document.getElementById('navMobileClose');
+      if (!burger || !menu) return;
+      function open()  { menu.classList.add('open'); burger.classList.add('open'); document.body.style.overflow = 'hidden'; }
+      function shut()  { menu.classList.remove('open'); burger.classList.remove('open'); document.body.style.overflow = ''; }
+      burger.addEventListener('click', function () { menu.classList.contains('open') ? shut() : open(); });
+      if (close) close.addEventListener('click', shut);
+      menu.querySelectorAll('a').forEach(function (a) { a.addEventListener('click', shut); });
+    })();
+  </script>
+</body>
+</html>
