@@ -1070,6 +1070,39 @@
     .contact-form__field.is-error { border-bottom-color: rgba(255,120,100,.8); }
     .contact-form__field.is-error ~ .field-error { display: block; }
 
+    /* ─── CONSENT CHECKBOX ─── */
+    .consent-group { width: 100%; }
+    .consent-label {
+      display: flex; align-items: flex-start; gap: 12px;
+      cursor: pointer; user-select: none;
+    }
+    .consent-check { display: none; }
+    .consent-box {
+      flex-shrink: 0; width: 20px; height: 20px;
+      border: 1.5px solid rgba(255,255,255,0.85);
+      border-radius: 5px; margin-top: 2px;
+      position: relative;
+      transition: background .2s, border-color .2s;
+    }
+    .consent-box::after {
+      content: ''; position: absolute;
+      left: 5px; top: 1px;
+      width: 5px; height: 9px;
+      border: 2px solid #fff; border-top: none; border-left: none;
+      transform: rotate(45deg); opacity: 0; transition: opacity .15s;
+    }
+    .consent-check:checked + .consent-box { background: rgba(255,255,255,0.25); border-color: #fff; }
+    .consent-check:checked + .consent-box::after { opacity: 1; }
+    .consent-text { font-size: 14px; font-weight: 400; color: rgba(255,255,255,0.70); line-height: 1.5; }
+    .consent-text a { color: rgba(255,255,255,0.85); text-decoration: underline; text-underline-offset: 2px; transition: color .2s; }
+    .consent-text a:hover { color: #fff; }
+    .consent-error {
+      display: none; font-size: 13px; font-weight: 500;
+      color: rgba(255,120,100,.8); padding: 5px 0 0; letter-spacing: -0.13px;
+    }
+    .consent-label.is-error .consent-box { border-color: rgba(255,120,100,.8); }
+    .consent-label.is-error ~ .consent-error { display: block; }
+
     /* ─── SUCCESS POPUP ─── */
     .success-popup {
       position: fixed;
@@ -1812,6 +1845,14 @@
             <span class="field-error">Введите название компании</span>
           </div>
         </div>
+        <div class="consent-group">
+          <label class="consent-label" id="consentLabel">
+            <input type="checkbox" class="consent-check" id="consentCheck" name="consent">
+            <span class="consent-box"></span>
+            <span class="consent-text">Согласен(а) на <a href="#">обработку персональных данных</a></span>
+          </label>
+          <span class="consent-error">Необходимо согласие на обработку данных</span>
+        </div>
         <button type="submit" class="btn btn--light">
           <span class="btn__wave--form"><svg preserveAspectRatio="none" viewBox="0 0 282 87" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M166.727 4.15853C168.552 4.12836 178.112 2.3144 180.235 1.89977C192.677 -0.529243 204.332 -0.751633 216.813 1.94733C222.72 3.09664 230.118 4.52818 235.799 6.42292C249.644 11.0401 272.552 24.9987 282 35.8517C267.147 27.3832 263.033 23.6576 245.649 19.0276C218.861 11.8929 195.93 14.8859 169.593 22.2741C158.723 25.1423 110.553 45.7754 112.479 58.1786C117.805 60.535 200.293 16.6165 241.282 33.3287C227.304 36.088 220.002 37.2935 206.614 42.6695C168.943 57.7957 137.31 92.8653 93.3552 86.157C73.6807 83.1543 54.6008 73.7859 38.2038 62.7375C24.2378 53.3722 11.4161 42.3964 0 30.0361C4.09275 31.4012 11.8418 34.0981 15.2829 35.2602C20.1604 36.9075 49.1161 42.2139 51.6037 41.1065L51.8643 39.9597L52.2467 41.0692C53.8156 41.6352 57.4514 40.9414 59.2849 40.7614C76.9398 39.0262 92.0361 32.4692 108.538 26.4072C114.072 23.1499 119.815 21.7946 125.477 19.3318C135.75 14.8634 146.018 11.4563 156.412 7.37898C159.971 5.98272 163.43 5.85388 166.727 4.15853Z" fill="url(#wbL)" fill-opacity="0.18"/><defs><linearGradient id="wbL" x1="0" y1="43.5" x2="282" y2="43.5" gradientUnits="userSpaceOnUse"><stop stop-color="#113E66"/><stop offset="1" stop-color="#FAFBFD"/></linearGradient></defs></svg></span>
           Отправить
@@ -2177,17 +2218,25 @@
         f.addEventListener('blur', function () { validate(f); });
       });
 
+      var consentLabel = document.getElementById('consentLabel');
+      var consentCheck = document.getElementById('consentCheck');
+
+      consentCheck.addEventListener('change', function () {
+        if (consentCheck.checked) consentLabel.classList.remove('is-error');
+      });
+
       form.addEventListener('submit', function (e) {
         e.preventDefault();
         var fields = Array.from(form.querySelectorAll('.contact-form__field'));
         var allOk  = fields.every(function (f) { return validate(f); });
-        if (!allOk) {
-          form.querySelector('.is-error').focus();
-          return;
-        }
+        var consentOk = consentCheck.checked;
+        consentLabel.classList.toggle('is-error', !consentOk);
+        if (!allOk) { form.querySelector('.is-error').focus(); return; }
+        if (!consentOk) return;
         popup.classList.add('visible');
         form.reset();
         fields.forEach(function (f) { f.classList.remove('is-error'); });
+        consentLabel.classList.remove('is-error');
       });
 
       function closePopup() { popup.classList.remove('visible'); }
