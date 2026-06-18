@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ВАЛУ — Чистое равновесие вашего дня</title>
+  <link rel="icon" type="image/svg+xml" href="images/favicon.svg">
   <style>
     /* ─── KREADON ─── */
     @font-face {
@@ -1549,6 +1550,148 @@
       .feature__label { font-size: 11px; max-width: 72px; }
       .nav__mobile-menu a { font-size: 32px; }
     }
+
+    /* ─── FOOTER REQS BUTTON ─── */
+    .footer__reqs-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-family: 'Kreadon', sans-serif;
+      color: #fff;
+      font-size: 19px;
+      font-weight: 500;
+      letter-spacing: -0.19px;
+      padding: 0;
+      transition: opacity .18s;
+    }
+    .footer__reqs-btn:hover { opacity: .65; }
+
+    /* ─── REQUISITES POPUP ─── */
+    .reqs-popup {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.48);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2100;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .3s;
+      padding: 20px;
+    }
+    .reqs-popup.visible { opacity: 1; pointer-events: auto; }
+    .reqs-popup__box {
+      background: #fff;
+      border-radius: 28px;
+      padding: 52px 56px 48px;
+      max-width: 560px;
+      width: 100%;
+      position: relative;
+      transform: translateY(28px);
+      transition: transform .38s cubic-bezier(.22,1,.36,1);
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+    .reqs-popup.visible .reqs-popup__box { transform: translateY(0); }
+    .reqs-popup__close {
+      position: absolute;
+      top: 20px; right: 24px;
+      background: none; border: none;
+      font-size: 22px;
+      color: rgba(17,62,102,.45);
+      cursor: pointer;
+      line-height: 1; padding: 4px;
+      transition: color .2s;
+    }
+    .reqs-popup__close:hover { color: var(--blue); }
+    .reqs-popup__title {
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--blue);
+      letter-spacing: -0.28px;
+      margin-bottom: 6px;
+    }
+    .reqs-popup__sub {
+      font-size: 17px;
+      font-weight: 500;
+      color: rgba(17,62,102,.6);
+      letter-spacing: -0.17px;
+      margin-bottom: 28px;
+    }
+    .reqs-popup__divider {
+      height: 1px;
+      background: rgba(17,62,102,.1);
+      margin-bottom: 24px;
+    }
+    .reqs-popup__list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+    .reqs-popup__row {
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+    }
+    .reqs-popup__label {
+      font-size: 14px;
+      font-weight: 500;
+      color: rgba(17,62,102,.5);
+      letter-spacing: -0.14px;
+      flex-shrink: 0;
+      min-width: 160px;
+    }
+    .reqs-popup__value {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--blue);
+      letter-spacing: -0.16px;
+      line-height: 1.4;
+    }
+    .reqs-popup__download {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding-top: 24px;
+      border-top: 1px solid rgba(17,62,102,.1);
+    }
+    .reqs-popup__download-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--blue);
+      color: #fff;
+      font-family: 'Kreadon', sans-serif;
+      font-size: 16px;
+      font-weight: 600;
+      letter-spacing: -0.16px;
+      text-decoration: none;
+      padding: 14px 28px;
+      border-radius: 100px;
+      transition: opacity .2s, transform .15s;
+    }
+    .reqs-popup__download-link:hover { opacity: .82; transform: translateY(-1px); }
+    .reqs-popup__download-link:active { transform: translateY(0); }
+    .reqs-popup__download-icon { width: 18px; height: 18px; flex-shrink: 0; }
+
+    @media (max-width: 1100px) {
+      .footer__reqs-btn { font-size: 17px; }
+    }
+    @media (max-width: 768px) {
+      .reqs-popup { padding: 16px; }
+      .reqs-popup__box {
+        padding: 40px 24px 36px;
+        border-radius: 20px;
+      }
+      .reqs-popup__title { font-size: 22px; }
+      .reqs-popup__row { flex-direction: column; gap: 2px; }
+      .reqs-popup__label { min-width: unset; font-size: 13px; }
+      .reqs-popup__value { font-size: 15px; }
+      .footer__reqs-btn { font-size: 16px; }
+      .reqs-popup__download-link { font-size: 15px; padding: 12px 22px; }
+    }
   </style>
 </head>
 <body>
@@ -1867,6 +2010,7 @@
           <a href="#about">о нас</a>
           <a href="#products">продукция</a>
           <a href="#reviews">отзывы</a>
+          <button class="footer__reqs-btn" id="openReqs" type="button">реквизиты</button>
         </nav>
         <a class="footer__policy" href="#">политика конфиденциальности</a>
       </div>
@@ -1888,6 +2032,46 @@
       <p class="success-popup__title">Заявка отправлена!</p>
       <p class="success-popup__desc">Мы свяжемся с вами в&nbsp;ближайшее время.</p>
       <button class="btn btn--dark" id="closePopupBtn">Отлично</button>
+    </div>
+  </div>
+
+  <!-- REQUISITES POPUP -->
+  <div class="reqs-popup" id="reqsPopup">
+    <div class="reqs-popup__box">
+      <button class="reqs-popup__close" id="closeReqs" aria-label="Закрыть">✕</button>
+      <p class="reqs-popup__title">Реквизиты</p>
+      <p class="reqs-popup__sub">ООО «Гранд-Стар»</p>
+      <div class="reqs-popup__divider"></div>
+      <div class="reqs-popup__list">
+        <div class="reqs-popup__row">
+          <span class="reqs-popup__label">Полное наименование</span>
+          <span class="reqs-popup__value">Общество с ограниченной ответственностью «Гранд-Стар»</span>
+        </div>
+        <div class="reqs-popup__row">
+          <span class="reqs-popup__label">ИНН</span>
+          <span class="reqs-popup__value">2311046562</span>
+        </div>
+        <div class="reqs-popup__row">
+          <span class="reqs-popup__label">КПП</span>
+          <span class="reqs-popup__value">231201001</span>
+        </div>
+        <div class="reqs-popup__row">
+          <span class="reqs-popup__label">ОГРН</span>
+          <span class="reqs-popup__value">1032306428340</span>
+        </div>
+        <div class="reqs-popup__row">
+          <span class="reqs-popup__label">Юридический адрес</span>
+          <span class="reqs-popup__value">350066, г. Краснодар, ул. Сормовская, д. 98, каб. 37/1</span>
+        </div>
+      </div>
+      <div class="reqs-popup__download">
+        <a class="reqs-popup__download-link" href="files/КАРТОЧКА_ПРЕДПРИЯТИЯ_ООО_ГРАНД_СТАР.pdf" download>
+          <svg class="reqs-popup__download-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 3v13M7 11l5 5 5-5M5 21h14" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          Скачать карточку предприятия (PDF)
+        </a>
+      </div>
     </div>
   </div>
 
@@ -2245,6 +2429,22 @@
       popup && popup.addEventListener('click', function (e) {
         if (e.target === popup) closePopup();
       });
+    })();
+
+    /* ─── REQUISITES POPUP ─── */
+    (function () {
+      var openBtn  = document.getElementById('openReqs');
+      var popup    = document.getElementById('reqsPopup');
+      var closeBtn = document.getElementById('closeReqs');
+      if (!openBtn || !popup) return;
+
+      function openReqs()  { popup.classList.add('visible');    document.body.style.overflow = 'hidden'; }
+      function closeReqs() { popup.classList.remove('visible'); document.body.style.overflow = ''; }
+
+      openBtn.addEventListener('click', openReqs);
+      closeBtn && closeBtn.addEventListener('click', closeReqs);
+      popup.addEventListener('click', function (e) { if (e.target === popup) closeReqs(); });
+      document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeReqs(); });
     })();
 
     /* ─── COOKIE BANNER ─── */
